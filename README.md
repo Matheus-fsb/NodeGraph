@@ -1,5 +1,5 @@
 
-# NodeGraph
+# NodeGraph v1.1
 
 **NodeGraph** é um sistema Node.js desenvolvido para gerar **relatórios gráficos estatísticos** com base em dados de pesquisas. Ele processa dados agrupados em classes, calcula estatísticas como média e variância, e gera uma imagem (PNG) contendo um gráfico e os dados analisados.
 
@@ -9,7 +9,7 @@
 
 - Geração de **relatórios visuais** com gráfico e dados estatísticos.
 - Cálculo de:
-  - Média
+  - Média, Moda e Mediana (simples e por dados agrupados)
   - Variância populacional e amostral
   - Frequência relativa
 - Exportação de imagem `.png` contendo o gráfico e tabela de dados.
@@ -72,23 +72,17 @@ node src/relatorio.js
 
 ## 🧠 Como Usar
 
-Você pode criar instâncias da classe `Pesquisa`, passando os dados da sua pesquisa (frequência, ponto médio, etc.) e depois gerar o gráfico:
+Você pode criar instâncias da classe `Pesquisa`, passando os dados da sua pesquisa e depois gerar o gráfico:
 
 ```javascript
-const Pesquisa = require('./models/Pesquisa');
+// Assumindo que o arquivo de entrada esteja no root do projeto
+import Pesquisa from './src/models/Pesquisa.js';
+import gerarRelatorioPNG from './src/relatorio.js';
 
-// Exemplo de dados
-const dados = [
-  { xi: '0 |-- 10', fi: 5 },
-  { xi: '10 |-- 20', fi: 8 },
-  { xi: '20 |-- 30', fi: 7 }
-];
+const dados = [10, 15, 14, 20, 18, 25, 15, 10, 17, 19, 18, 25, 30, 32, 15]; //exemplo
+const pesquisa = new Pesquisa(dados);
 
-const pesquisa = new Pesquisa('Título da Pesquisa', dados);
-pesquisa.processar(); // calcula médias, etc.
-
-const gerarRelatorio = require('./relatorio');
-gerarRelatorio(pesquisa);
+await gerarRelatorioPNG(pesquisa, 'nomeDoArquivo.png', 'Nome da Pesquisa');
 ```
 
 O relatório será salvo como imagem `.png` com título, gráfico e os dados.
@@ -97,10 +91,31 @@ O relatório será salvo como imagem `.png` com título, gráfico e os dados.
 
 ## 🖼 Exemplo de Saída
 
+Os dados podem ser tirados dos getters do modelo `Pesquisa.js`. Para listar tais dados no console é só copiar e colar esse script no arquivo de entrada:
+
+```javascript
+console.log("Número de dados:", pesquisa.numDados);
+console.log("Dados ordenados:", pesquisa.dadosOrdenados);
+console.log("Amplitude:", pesquisa.amplitude);
+console.log("Número de classes:", pesquisa.numeroClasses);
+console.log("H:", pesquisa.h);
+console.table(pesquisa.tabelaDados);
+console.log("Média:", pesquisa.media);
+console.log("Média Simples:", pesquisa.mediaSimples);
+console.log("Moda:", pesquisa.moda);
+console.log("Moda Simples:", pesquisa.modaSimples);
+console.log("Mediana:", pesquisa.mediana);
+console.log("Mediana Simples:", pesquisa.mediaSimples);
+console.log("Variância (Populacional):", pesquisa.varianciaPopulacao);
+console.log("Variância (Amostra):", pesquisa.varianciaAmostra);
+console.log("Desvio Padrão (Populacional):", pesquisa.desvioPadraoPop);
+console.log("Desvio Padrão (Amostra):", pesquisa.desvioPadraoAms);
+```
+
 A imagem gerada pelo sistema conterá:
 
 - Um gráfico de barras ou linhas (Chart.js)
-- Uma tabela de dados com fi, xi, ponto médio, frequência relativa, etc.
+- Exibição dos dados
 - Título com o nome da pesquisa
 
 ---
@@ -117,16 +132,14 @@ A imagem gerada pelo sistema conterá:
 
 - Interface web para entrada de dados
 - Exportação para PDF
-- Análises adicionais como moda, mediana, desvio padrão
 - API REST para consumo externo
 
 ---
 
 ## 👨‍💻 Autor
 
-**Seu Nome**  
-Desenvolvedor fullstack júnior | JavaScript | Java  
-[LinkedIn](https://linkedin.com/in/seu-perfil)
+Matheus Barros
+Desenvolvedor fullstack júnior | JavaScript
 
 ---
 
