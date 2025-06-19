@@ -153,7 +153,7 @@ class Pesquisa {
         let variancia = 0;
 
         this.#tabelaDados.forEach((element) => {
-            variancia += (element.fi * (element.pm - this.#media)) ** 2;
+            variancia += (element.fi * (element.pm - this.#media) ** 2);
         })
 
         variancia = variancia / this.#numDados;
@@ -165,7 +165,7 @@ class Pesquisa {
         let variancia = 0;
 
         this.#tabelaDados.forEach((element) => {
-            variancia += (element.fi * (element.pm - this.#media)) ** 2;
+            variancia += (element.fi * (element.pm - this.#media) ** 2);
         })
 
         variancia = (variancia / this.#numDados) - 1;
